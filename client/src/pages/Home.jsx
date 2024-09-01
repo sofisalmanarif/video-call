@@ -1,8 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { socketContext, useSocket } from '../context/socket'
 
 const Home = () => {
     const [email, setemail] = useState("")
     const [roomId, setRoomId] = useState("")
+   const socket = useSocket()
+   console.log(socket)
+    // const {socket} = useContext(socketContext)
+   socket.emit("join-room",{email:"dshgh",roomId:"dhsdhfdghgfbshgh"})
+
+
+
+
 
     const submitHandler=()=>{
         console.log(email,roomId)

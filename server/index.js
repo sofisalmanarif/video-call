@@ -8,7 +8,7 @@ const app =express()
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors:true
-});
+})
 
 io.on("connection", (socket) => {
     console.log("user connected")
