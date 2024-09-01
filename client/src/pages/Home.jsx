@@ -15,7 +15,7 @@ const Home = () => {
 
     useEffect(() => {
      socket.on("room-joined",({roomId})=>navigate(`/room/${roomId}`))
-    }, [])
+    }, [socket])
     
   return (
     <div className='h-screen w-full flex items-center justify-center '>
