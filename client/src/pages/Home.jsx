@@ -1,21 +1,22 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { socketContext, useSocket } from '../context/socket'
+import {useNavigate} from "react-router-dom"
 
 const Home = () => {
     const [email, setemail] = useState("")
     const [roomId, setRoomId] = useState("")
-   const socket = useSocket()
-   console.log(socket)
-    // const {socket} = useContext(socketContext)
-   socket.emit("join-room",{email:"dshgh",roomId:"dhsdhfdghgfbshgh"})
-
-
-
-
+    const navigate = useNavigate()
+    const socket = useSocket()
 
     const submitHandler=()=>{
         console.log(email,roomId)
+        socket.emit("join-room",{email,roomId})
     }
+
+    useEffect(() => {
+     socket.on("room-joined",({roomId})=>navigate(`/room/${roomId}`))
+    }, [])
+    
   return (
     <div className='h-screen w-full flex items-center justify-center '>
        <div className='flex gap-2 flex-col'>
