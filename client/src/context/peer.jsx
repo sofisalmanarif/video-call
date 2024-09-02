@@ -1,8 +1,8 @@
-import { createContext, useMemo } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 const peerContext = createContext(null)
 
-
+export const usePeer =()=>useContext(peerContext)
 
 export const peerContextProvider=({children})=>{
     const peer = useMemo(()=>RTCPeerConnection(
@@ -15,7 +15,11 @@ export const peerContextProvider=({children})=>{
             }
         }
     ),[])
-
+const createOffer =async()=>{
+    const offer = await peer.createOffer()
+    await peer.setLocalDiscription(offer)
+    return offer
+}
     return(
         <peerContext.Provider value={peer}>
             {children}
