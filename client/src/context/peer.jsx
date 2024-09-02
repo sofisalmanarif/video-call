@@ -17,13 +17,19 @@ export const PeerContextProvider=({children})=>{
         ]
         }
     ),[])
-const createOffer =async()=>{
-    const offer = await peer.createOffer()
-    await peer.setLocalDiscription(offer)
-    return offer
-}
+    const createOffer = async () => {
+        try {
+            const offer = await peer.createOffer();
+            await peer.setLocalDescription(offer); 
+            return offer;
+        } catch (error) {
+            console.error("Error creating or setting local description:", error);
+            throw error; 
+        }
+    };
+    
     return(
-        <peerContext.Provider value={peer}>
+        <peerContext.Provider value={{peer ,createOffer}}>
             {children}
         </peerContext.Provider>
     )
