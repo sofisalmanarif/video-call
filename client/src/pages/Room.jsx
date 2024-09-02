@@ -14,9 +14,16 @@ const Room = () => {
     socket.emit("call-user",{email,offer})
 
    }
+
+   const handelIncomminCall=(from,offer)=>{
+    console.log(from,offer)
+    
+
+   }
    useEffect(() => {
    
         socket.on("user-joined",({email})=>handelNewUser(email))
+        socket.on("incomming-call",({from,offer})=>handelIncomminCall(from,offer))
    }, [socket])
    
   return (
