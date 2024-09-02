@@ -4,15 +4,17 @@ const peerContext = createContext(null)
 
 export const usePeer =()=>useContext(peerContext)
 
-export const peerContextProvider=({children})=>{
-    const peer = useMemo(()=>RTCPeerConnection(
+export const PeerContextProvider=({children})=>{
+    const peer = useMemo(()=>new RTCPeerConnection(
         {
-            iceServers: {
+            iceServers:[
+                 {
                 urls: ["stun:stun.l.google.com:19302",
                     "stun:global.stun.twilo.com:3478",
                 ]
 
             }
+        ]
         }
     ),[])
 const createOffer =async()=>{
