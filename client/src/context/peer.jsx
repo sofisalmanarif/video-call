@@ -27,6 +27,18 @@ export const PeerContextProvider=({children})=>{
             throw error; 
         }
     };
+
+    const createAnswer = async (offer) => {
+        try {
+            await peer.setRemoteDescription(offer); 
+            const ans = await peer.createAnswer();
+            await peer.setLocalDescription(ans);
+            return ans;
+        } catch (error) {
+            console.error("Error creating or answering local description:", error);
+            throw error; 
+        }
+    };
     
     return(
         <peerContext.Provider value={{peer ,createOffer}}>
