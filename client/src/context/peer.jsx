@@ -30,8 +30,8 @@ export const PeerContextProvider=({children})=>{
 
     const createAnswer = async (offer) => {
         try {
-            await peer.setRemoteDescription(offer); 
-            const ans = await peer.createAnswer();
+            await peer.setRemoteDescription(new RTCSessionDescription(offer)); 
+            const ans = await peer.createAnswer(offer);
             await peer.setLocalDescription(ans);
             return ans;
         } catch (error) {
@@ -39,9 +39,13 @@ export const PeerContextProvider=({children})=>{
             throw error; 
         }
     };
+
+    const setRemoteAns = (ans)=>{
+        return peer.setRemoteDescription(new RTCSessionDescription(ans))
+    }
     
     return(
-        <peerContext.Provider value={{peer ,createOffer}}>
+        <peerContext.Provider value={{peer ,createOffer,createAnswer,setRemoteAns}}>
             {children}
         </peerContext.Provider>
     )

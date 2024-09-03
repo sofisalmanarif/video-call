@@ -29,6 +29,10 @@ io.on("connection", (socket) => {
       socket.to(userSocketId).emit("incomming-call",{offer,from:emailCalling})
 
     })
+    socket.on("call-accepted",({email,ans})=>{
+      const userSocketId = emailToSocketmapping.get(email)
+      socket.to(userSocketId).emit("call-accepted",{ans})
+    })
 
 });
 

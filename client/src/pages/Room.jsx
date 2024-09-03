@@ -6,7 +6,7 @@ import { usePeer } from '../context/peer'
 const Room = () => {
    const {roomId} =  useParams()
    const socket = useSocket()
-   const { peer,createOffer} = usePeer()
+   const { peer,createOffer,createAnswer,setRemoteAns} = usePeer()
 
    const handelNewUser =async(email)=>{
     console.log(email,"joined")
@@ -15,15 +15,21 @@ const Room = () => {
 
    }
 
-   const handelIncomminCall=(from,offer)=>{
+   const handelIncomminCall=async(from,offer)=>{
     console.log(from,offer)
-    
+    const ans = await createAnswer(offer)
+    socket.emit("call-accepted",{email:from,ans})
+   }
 
+   const handelCallAccepted =async(ans)=>{
+    console.log(ans)
+    await setRemoteAns(ans)
    }
    useEffect(() => {
    
         socket.on("user-joined",({email})=>handelNewUser(email))
         socket.on("incomming-call",({from,offer})=>handelIncomminCall(from,offer))
+        socket.on("call-accepted",({ans})=>handelCallAccepted(ans))
    }, [socket])
    
   return (
