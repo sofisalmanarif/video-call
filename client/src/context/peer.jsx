@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 
 const peerContext = createContext(null)
 
@@ -17,32 +17,58 @@ export const PeerContextProvider=({children})=>{
         ]
         }
     ),[])
-    const createOffer = async () => {
-        try {
-            const offer = await peer.createOffer();
-            await peer.setLocalDescription(offer); 
-            return offer;
-        } catch (error) {
-            console.error("Error creating or setting local description:", error);
-            throw error; 
-        }
-    };
+    const createOffer = useCallback(
+        async () => {
+            try {
+                const offer = await peer.createOffer();
+                await peer.setLocalDescription(offer); 
+                return offer;
+            } catch (error) {
+                console.error("Error creating or setting local description:", error);
+                throw error; 
+            }
+        },
+      [peer],
+    )
+    
 
-    const createAnswer = async (offer) => {
-        try {
-            await peer.setRemoteDescription(new RTCSessionDescription(offer)); 
-            const ans = await peer.createAnswer(offer);
-            await peer.setLocalDescription(ans);
-            return ans;
-        } catch (error) {
-            console.error("Error creating or answering local description:", error);
-            throw error; 
-        }
-    };
+    const createAnswer = useCallback(
+        async (offer) => {
+            try {
+                await peer.setRemoteDescription(new RTCSessionDescription(offer)); 
+                const ans = await peer.createAnswer(offer);
+                await peer.setLocalDescription(ans);
+                return ans;
+            } catch (error) {
+                console.error("Error creating or answering local description:", error);
+                throw error; 
+            }
+        },
+      [peer],
+    )
+    
 
-    const setRemoteAns = (ans)=>{
-        return peer.setRemoteDescription(new RTCSessionDescription(ans))
+    const setRemoteAns =async (ans)=>{
+        await peer.setRemoteDescription(new RTCSessionDescription(ans))
     }
+    peer.onconnectionstatechange = () => {
+        switch (peer.connectionState) {
+            case 'connected':
+                console.log("The connection has become fully connected");
+                break;
+            case 'disconnected':
+            case 'failed':
+                console.log("The connection has been closed");
+                // Optionally, attempt to reconnect or clean up
+                break;
+            case 'closed':
+                console.log("The connection has been closed cleanly");
+                break;
+            default:
+                console.log("Connection state changed to:", peer.connectionState);
+                break;
+        }
+    };
     
     return(
         <peerContext.Provider value={{peer ,createOffer,createAnswer,setRemoteAns}}>

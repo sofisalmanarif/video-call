@@ -15,6 +15,10 @@ const Home = () => {
 
     useEffect(() => {
      socket.on("room-joined",({roomId})=>navigate(`/room/${roomId}`))
+
+     return()=>{
+      socket.off("room-joined",({roomId})=>navigate(`/room/${roomId}`))
+     }
     }, [socket])
     
   return (
