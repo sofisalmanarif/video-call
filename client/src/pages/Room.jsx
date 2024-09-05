@@ -8,7 +8,7 @@ const Room = () => {
    const {roomId} =  useParams()
    const socket = useSocket()
    const [myStream, setMyStream] = useState(null)
-   const { peer,createOffer,createAnswer,setRemoteAns} = usePeer()
+   const { peer,createOffer,createAnswer,setRemoteAns,sendStream} = usePeer()
 
    const handelNewUser =useCallback(
     async(email)=>{
@@ -40,6 +40,7 @@ const Room = () => {
    )
    const getUserMediaStream =async()=>{
     const stream =await navigator.mediaDevices.getUserMedia({video:true,audio:true})
+    sendStream(stream)
     setMyStream(stream)
    }
 useEffect(() => {

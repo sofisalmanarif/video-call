@@ -69,9 +69,17 @@ export const PeerContextProvider=({children})=>{
                 break;
         }
     };
+
+    const sendStream =(stream)=>{
+        const tracks = stream.getTranks()
+        for(let track of tracks){
+            peer.addTrack(track)
+        }
+
+    }
     
     return(
-        <peerContext.Provider value={{peer ,createOffer,createAnswer,setRemoteAns}}>
+        <peerContext.Provider value={{peer ,createOffer,createAnswer,setRemoteAns,sendStream}}>
             {children}
         </peerContext.Provider>
     )
