@@ -8,7 +8,8 @@ const Room = () => {
    const {roomId} =  useParams()
    const socket = useSocket()
    const [myStream, setMyStream] = useState(null)
-   const { peer,createOffer,createAnswer,setRemoteAns,sendStream} = usePeer()
+   
+   const { peer,createOffer,createAnswer,setRemoteAns,sendStream,remoteStream} = usePeer()
 
    const handelNewUser =useCallback(
     async(email)=>{
@@ -66,6 +67,8 @@ useEffect(() => {
     <div>
       <div>
       <ReactPlayer url={myStream} playing={true} />
+      <ReactPlayer url={remoteStream} playing={true} />
+      
       </div>
     </div>
   )
