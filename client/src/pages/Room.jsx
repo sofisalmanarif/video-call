@@ -41,7 +41,7 @@ const Room = () => {
    )
    const getUserMediaStream =async()=>{
     const stream =await navigator.mediaDevices.getUserMedia({video:true,audio:true})
-    sendStream(stream)
+    
     setMyStream(stream)
    }
 useEffect(() => {
@@ -66,6 +66,7 @@ useEffect(() => {
   return (
     <div>
       <div>
+        <button onClick={e=>sendStream(myStream)}>Share Video</button>
       <ReactPlayer url={myStream} playing={true} />
       <ReactPlayer url={remoteStream} playing={true} />
       
